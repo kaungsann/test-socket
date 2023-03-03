@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #343a40;
+}
+h1,
+h2 {
+  color: white;
+  text-align: center;
+}
+.logincontainer {
+  width: 30%;
+  margin: 0 auto;
+}
+.inputbox {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.login {
+  margin-left: 430px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.inputname {
+  margin-top: 30px;
+}
+.chatbox {
+  width: 45%;
+  margin: 0 auto;
+  display: none;
+  margin-top: 70px;
+}
+.textarea {
+  margin-top: 40px;
+  width: 100%;
+  height: 400px;
+  background-color: #0b212f;
+}
+.sendbox {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.text {
+  width: 78%;
+  border: none;
+}
+.send {
+  width: 20%;
+}
+
+.showtext {
+  font-size: 20px;
+  margin-left: 12px;
+}
+.loginhide {
+  display: none;
+}
+.chatappear {
+  display: block;
+}
+
+.textwrap {
+  color: white;
+}

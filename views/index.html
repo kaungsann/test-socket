@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>ChatApp</title>
+  </head>
+  <body>
+    <div class="logincontainer">
+      <div class="inputbox">
+        <h1>Enter Your Name</h1>
+        <input
+          class="form-control inputname"
+          type="text"
+          placeholder="Enter UserName"
+        />
+      </div>
+      <button class="login btn btn-primary">Login</button>
+    </div>
+    <div class="chatbox">
+      <h2>Chatting with KS</h2>
+      <div class="textarea">
+        <div class="textwrap">
+          <div class="showtext"></div>
+        </div>
+      </div>
+      <div class="sendbox">
+        <input
+          type="text"
+          class="form-control text"
+          placeholder="Enter text"
+          aria-describedby="basic-addon1"
+        />
+        <button class="send btn btn-primary">Send</button>
+      </div>
+    </div>
+    <button class="btn btn-primary group">group chat</button>
+
+    <button class="btn btn-primary map">MAP chat</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const userSocket = io.connect();
+      const groupSocket = io("/group");
+      const mapBook = io("/map");
+      let inputnameTag = document.getElementsByClassName("inputname")[0];
+      let loginTag = document.getElementsByClassName("login")[0];
+      let logincontainerTag =
+        document.getElementsByClassName("logincontainer")[0];
+      let chatboxTag = document.getElementsByClassName("chatbox")[0];
+      let textTag = document.getElementsByClassName("text")[0];
+      let sendTag = document.getElementsByClassName("send")[0];
+      let showtextTag = document.getElementsByClassName("showtext")[0];
+      let textwrapTag = document.getElementsByClassName("textwrap")[0];
+      let groupTag = document.getElementsByClassName("group")[0];
+      let mapTag = document.getElementsByClassName("map")[0];
+
+      groupTag.addEventListener("click", () => {
+        groupSocket.emit("sendGroup", textTag.value);
+        textTag.value = "";
+        groupSocket.on("resendgroup", (data) => {
+          let message = showtextTag.innerText;
+          showtextTag.innerText = message + "\n" + data;
+        });
+      });
+
+      mapTag.addEventListener("click", () => {
+        mapBook.emit("sendMap", "sending map message");
+      });
+
+      const loginValid = () => {
+        userSocket.emit("login", inputnameTag.value);
+        inputnameTag.value = "";
+      };
+      userSocket.on("login-success", (data) => {
+        if (data) {
+          logincontainerTag.classList.add("loginhide");
+          chatboxTag.classList.add("chatappear");
+        }
+      });
+      const sendText = () => {
+        userSocket.emit("sendMsg", textTag.value);
+        textTag.value = "";
+      };
+      userSocket.on("resend", (data) => {
+        let message = showtextTag.innerText;
+        showtextTag.innerText = message + "\n" + data;
+      });
+      loginTag.addEventListener("click", loginValid);
+      sendTag.addEventListener("click", sendText);
+    </script>
+
+    <!-- <img src="./imgs/icons.jpeg" />-->
+  </body>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"
+  ></script>
+</html>
