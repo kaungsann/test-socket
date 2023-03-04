@@ -94,6 +94,10 @@
         let message = showtextTag.innerText;
         showtextTag.innerText = message + "\n" + data;
       });
+      userSocket.on("onlyuser", (data) => {
+        let message = showtextTag.innerText;
+        showtextTag.innerText = message + "\n" + data;
+      });
       loginTag.addEventListener("click", loginValid);
       sendTag.addEventListener("click", sendText);
     </script>

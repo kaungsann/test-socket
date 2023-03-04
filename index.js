@@ -38,19 +38,23 @@ mapSocket.on("connection", (socket) => {
 io.sockets.on("connection", (socket) => {
   socket.on("login", (data) => {
     console.log("user send data", data);
+
     socket.username = data;
+
+    userMap.set(socket.username, socket.id);
+    if (socket.username === "kaungsann" || socket.username === "phoekaung") {
+      socket.join(room1);
+    } else {
+      socket.join(room2);
+    }
+
     socket.emit("login-success", true);
-    // userMap.set(socket.username, socket.id);
-    // if (socket.username === "w" || socket.username === "x") {
-    //   socket.join(room1);
-    //   socket.emit("login-success", true);
-    // } else {
-    //   socket.join(room2);
-    // }
     //  io.sockets.connected(socket.id).emit("login-success", true);
   });
   socket.on("sendMsg", (data) => {
-    io.emit("resend", socket.username + " : " + data);
+    io.in(room1).emit("onlyuser", socket.username + ": " + data);
+    io.in(room2).emit("resend", socket.username + ": " + data);
+    // io.emit("resend", socket.username + " : " + data);
     // io.sockets.connected[socket.id].emit(
     // "resend",
     //  data + " : " + socket.username
@@ -58,7 +62,6 @@ io.sockets.on("connection", (socket) => {
     // io.emit("resend", data + " : " + socket.username);
     // socket.emit("resend", data + " : " + socket.username);
     //io.emit("resend", socket.username + ": " + data);
-    // io.in(room1).emit("resend", socket.username + ": " + data);
   });
 });
 
